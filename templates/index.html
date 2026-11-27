@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Student Assignment Tracker</title>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 720px; margin: 48px auto; padding: 0 18px; background: #f5f7fb; color: #202938; }
+    main { background: white; padding: 28px; border-radius: 12px; box-shadow: 0 4px 18px #17255412; }
+    h1 { margin-top: 0; } form.add { display: flex; gap: 8px; }
+    input { flex: 1; padding: 11px; border: 1px solid #cbd5e1; border-radius: 6px; }
+    button { padding: 10px 14px; border: 0; border-radius: 6px; background: #2457c5; color: white; cursor: pointer; }
+    li { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 0; border-bottom: 1px solid #e5e7eb; }
+    .done { color: #64748b; text-decoration: line-through; } .empty { color: #64748b; }
+  </style>
+</head>
+<body>
+<main>
+  <h1>Student Assignment Tracker</h1>
+  <p>Add your assignments and mark them complete when finished.</p>
+  <form class="add" action="/assignments" method="post">
+    <input name="title" placeholder="Assignment title" aria-label="Assignment title" required maxlength="120">
+    <button type="submit">Add assignment</button>
+  </form>
+  <h2>My assignments</h2>
+  {% if assignments %}
+  <ul>
+    {% for assignment in assignments %}
+    <li>
+      <span class="{{ 'done' if assignment.completed else '' }}">{{ assignment.title }}</span>
+      {% if not assignment.completed %}
+      <form action="/assignments/{{ assignment.id }}/complete" method="post">
+        <button type="submit">Mark complete</button>
+      </form>
+      {% else %}<strong>Completed</strong>{% endif %}
+    </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p class="empty">No assignments yet. Add your first one above.</p>
+  {% endif %}
+</main>
+</body>
+</html>
